@@ -1,6 +1,4 @@
-import {
-  setTagDocumentUrl,
-} from './configuration'
+import { setTagDocumentUrl } from './configuration'
 
 /**
  * Creates a menu entry in the Google Docs UI when the document is opened.

@@ -1,7 +1,5 @@
 import 'google-apps-script'
-import {
-  getTagDocumentUrl,
-} from './configuration'
+import { getTagDocumentUrl } from './configuration'
 
 type File = GoogleAppsScript.Drive.File
 

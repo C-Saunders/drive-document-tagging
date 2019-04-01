@@ -32,9 +32,7 @@
       (function addChangeDocListener() {
         jQuery('#changeDoc').click(function() {
           google.script.run
-            .withSuccessHandler(function (url, _elem) {
-              document.getElementById('changeDoc').href = url
-            })
+            .withSuccessHandler(function (_, _elem) {})
             .withFailureHandler(function (msg, _elem) { console.error(msg) })
             .updateTagSourceDocument()
         })

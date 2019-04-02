@@ -31,7 +31,7 @@ function onInstall(e: any): void {
 }
 
 function showSidebar(): void {
-  var ui = HtmlService.createTemplateFromFile('Sidebar')
+  var ui = HtmlService.createTemplateFromFile('sidebar')
     .evaluate()
     .setTitle('Document Tags')
   DocumentApp.getUi().showSidebar(ui)

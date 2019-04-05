@@ -6,10 +6,10 @@ type File = GoogleAppsScript.Drive.File
 type Tags = Array<string>
 
 function getAvailableTags(): Tags {
-  const tags = JSON.parse(DocumentApp.openByUrl(getTagDocumentUrl()).getBody().getText())
+  const sheet = SpreadsheetApp.openByUrl(getTagDocumentUrl()).getSheets()[0]
+  const values = sheet.getDataRange().getValues().slice(1) // exclude header
 
-  // may be able to use the descriptions at some point as well
-  return Object.keys(tags)
+  return values.map(row => row[0].toString())
 }
 
 function getCurrentTags(): Tags {

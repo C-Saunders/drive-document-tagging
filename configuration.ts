@@ -1,4 +1,4 @@
-const CONFIG_URL_KEY = 'TAG_DOC_JSON'
+const CONFIG_URL_KEY = 'TAG_SPREADSHEET_URL'
 const scriptProperties = PropertiesService.getScriptProperties()
 
 export {
@@ -6,13 +6,8 @@ export {
   getTagDocumentUrl,
 }
 
-function setTagDocumentUrl(): void {
-  const ui = DocumentApp.getUi()
-  const response = ui.prompt('URL of Drive document containing the tags JSON', ui.ButtonSet.OK_CANCEL)
-
-  if (response.getSelectedButton() === ui.Button.OK) {
-    scriptProperties.setProperty(CONFIG_URL_KEY, response.getResponseText())
-  }
+function setTagDocumentUrl(url: string): void {
+  scriptProperties.setProperty(CONFIG_URL_KEY, url)
 }
 
 function getTagDocumentUrl(): string {

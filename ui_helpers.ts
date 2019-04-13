@@ -1,4 +1,4 @@
-import { setTagDocumentUrl } from './configuration'
+// TODO: All DocumentApp.getUi calls need to work for other types of documents
 
 /**
  * Creates a menu entry in the Google Docs UI when the document is opened.
@@ -34,6 +34,7 @@ function showSidebar(): void {
   var ui = HtmlService.createTemplateFromFile('sidebar')
     .evaluate()
     .setTitle('Document Tags')
+
   DocumentApp.getUi().showSidebar(ui)
 }
 
@@ -43,6 +44,16 @@ function include(filename: string): string {
     .getContent()
 }
 
-function updateTagSourceDocument(): void {
-  setTagDocumentUrl()
+function showPicker() {
+  var html = HtmlService.createHtmlOutputFromFile('file_picker')
+    .setWidth(600)
+    .setHeight(425)
+    .setSandboxMode(HtmlService.SandboxMode.IFRAME);
+
+  DocumentApp.getUi().showModalDialog(html, 'Select Tag Document');
+}
+
+function getOAuthToken() {
+  DriveApp.getRootFolder();
+  return ScriptApp.getOAuthToken();
 }

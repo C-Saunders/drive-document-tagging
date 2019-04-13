@@ -14,45 +14,51 @@
   <div class="sidebar">
     <input name="tags" id="tags">
     <br />
-    <a id="docLink">Edit Tags Document</a>
+    <a id="docLink"><button>Edit Tags Document</button></a>
     <br />
     <br />
-    <a id="changeDoc" href="">Update Tags Document URL</a>
+    <button id="changeDoc">Select Tags Document</button>
 
     <script>
-      (function addAvailableTagsDocLink() {
+      // Define helpers
+      function addAvailableTagsDocLink() {
         google.script.run
           .withSuccessHandler(function (url, _elem) {
-            document.getElementById('docLink').href = url
+            if (url) {
+              document.getElementById('docLink').href = url;
+            } else {
+              jQuery('#docLink').click(doShowPicker)
+            }
           })
           .withFailureHandler(function (msg, _elem) { console.error(msg) })
-          .getTagDocumentUrl()
-      })()
+          .getTagDocumentUrl();
+      }
 
-      (function addChangeDocListener() {
-        jQuery('#changeDoc').click(function() {
-          google.script.run
-            .withSuccessHandler(function (_, _elem) {})
-            .withFailureHandler(function (msg, _elem) { console.error(msg) })
-            .updateTagSourceDocument()
-        })
-      })()
-    </script>
+      function addChangeDocListener() {
+        jQuery('#changeDoc').click(doShowPicker)
+      }
 
-    <script>
-      function setWhitelist(tagify) {
+      function doShowPicker() {
+        google.script.run
+          .withSuccessHandler(function (_, _elem) { })
+          .withFailureHandler(function (msg, _elem) { console.error(msg) })
+          .showPicker();
+      }
+
+      function loadTags(tagify) {
         google.script.run
           .withSuccessHandler(function (availableTags, _elem) {
-            tagify.settings.whitelist = availableTags
+            tagify.settings.whitelist = availableTags || [];
+            setCurrentTags(tagify);
           })
           .withFailureHandler(function (msg, _elem) { console.error(msg) })
-          .getAvailableTags()
+          .getAvailableTags();
       }
 
       function setCurrentTags(tagify, retryCount = 0) {
         google.script.run
           .withSuccessHandler(function (currentTags, _elem) {
-            tagify.addTags(currentTags.map(function (tag) { return { value: tag } }))
+            currentTags && tagify.addTags(currentTags.map(function (tag) { return { value: tag } }))
           })
           .withFailureHandler(function (msg, _elem) {
             console.error(msg)
@@ -60,24 +66,35 @@
               setTimeout(setCurrentTags(tagify, retryCount + 1), 300)
             }
           })
-          .getCurrentTags()
+          .getCurrentTags();
       }
 
       function onAddTag(event) {
         google.script.run
           .withSuccessHandler(function (_, _elem) { })
           .withFailureHandler(function (msg, _elem) { console.error(msg) })
-          .addTagToActiveDocument(event.detail.data.value)
+          .addTagToActiveDocument(event.detail.data.value);
       }
 
       function onRemoveTag(event) {
         google.script.run
           .withSuccessHandler(function (_, _elem) { })
           .withFailureHandler(function (msg, _elem) { console.error(msg) })
-          .removeTagFromActiveDocument(event.detail.data.value)
+          .removeTagFromActiveDocument(event.detail.data.value);
       }
 
-      var input = document.getElementById('tags')
+      function reloadUi() {
+        addAvailableTagsDocLink();
+        loadTags(tagify);
+      }
+    </script>
+
+    <script>
+      // Set up
+      addAvailableTagsDocLink();
+      addChangeDocListener();
+
+      var input = document.getElementById('tags');
       var tagify = new Tagify(input, {
         whitelist: [],
         enforceWhitelist: true,
@@ -89,10 +106,9 @@
           add: onAddTag,
           remove: onRemoveTag,
         }
-      })
+      });
 
-      setWhitelist(tagify)
-      setCurrentTags(tagify)
+      loadTags(tagify);
     </script>
 
   </div>

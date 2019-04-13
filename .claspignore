@@ -1,8 +1,7 @@
-**/**
-!appsscript.json
-!configuration.ts
-!sidebar.html
-!tag_management.ts
-!tagify_css.html
-!tagify_javascript.html
-!ui_helpers.ts
+.gitignore
+node_modules/*
+package.json
+package-lock.json
+jsconfig.json
+.claspignore
+.clasp.json

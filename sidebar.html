@@ -18,6 +18,9 @@
     <a id="docLink"><button>Edit Tags Document</button></a>
     <br />
     <br />
+    <a id="reloadTags"><button>Refresh Available Tags</button></a>
+    <br />
+    <br />
     <button id="changeDoc">Select Tags Document</button>
 
     <script>
@@ -35,8 +38,12 @@
           .getTagDocumentUrl();
       }
 
+      function addRefreshTagsListener() {
+        jQuery('#reloadTags').click(loadTags);
+      }
+
       function addChangeDocListener() {
-        jQuery('#changeDoc').click(doShowPicker)
+        jQuery('#changeDoc').click(doShowPicker);
       }
 
       function doShowPicker() {
@@ -46,25 +53,25 @@
           .showPicker();
       }
 
-      function loadTags(tagify) {
+      function loadTags() {
         google.script.run
           .withSuccessHandler(function (availableTags, _elem) {
-            tagify.settings.whitelist = availableTags || [];
-            setCurrentTags(tagify);
+            window.tagify.settings.whitelist = availableTags || [];
+            setCurrentTags();
           })
           .withFailureHandler(function (msg, _elem) { console.error(msg) })
           .getAvailableTags();
       }
 
-      function setCurrentTags(tagify, retryCount = 0) {
+      function setCurrentTags(retryCount = 0) {
         google.script.run
           .withSuccessHandler(function (currentTags, _elem) {
-            currentTags && tagify.addTags(currentTags.map(function (tag) { return { value: tag } }))
+            currentTags && window.tagify.addTags(currentTags.map(function (tag) { return { value: tag } }))
           })
           .withFailureHandler(function (msg, _elem) {
             console.error(msg)
             if (retryCount < 3) {
-              setTimeout(setCurrentTags(tagify, retryCount + 1), 300)
+              setTimeout(setCurrentTags(retryCount + 1), 300)
             }
           })
           .getCurrentTags();
@@ -86,13 +93,14 @@
 
       function reloadUi() {
         addAvailableTagsDocLink();
-        loadTags(tagify);
+        loadTags();
       }
     </script>
 
     <script>
       // Set up
       addAvailableTagsDocLink();
+      addRefreshTagsListener();
       addChangeDocListener();
 
       var input = document.getElementById('tags');
@@ -109,7 +117,7 @@
         }
       });
 
-      loadTags(tagify);
+      loadTags();
     </script>
 
   </div>

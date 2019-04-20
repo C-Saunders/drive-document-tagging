@@ -1,4 +1,18 @@
-// TODO: All DocumentApp.getUi calls need to work for other types of documents
+function getUi(): GoogleAppsScript.Base.Ui {
+  try {
+    return DocumentApp.getUi()
+  } catch (e) {}
+
+  try {
+    return SpreadsheetApp.getUi()
+  } catch (e) {}
+
+  try {
+    return SlidesApp.getUi()
+  } catch (e) {}
+
+  throw new Error('Add-on only supports Docs, Spreadsheets, and Slides')
+}
 
 /**
  * Creates a menu entry in the Google Docs UI when the document is opened.
@@ -10,7 +24,7 @@
  *     running in, inspect e.authMode.
  */
 function onOpen(_: any): void {
-  DocumentApp.getUi().createAddonMenu()
+  getUi().createAddonMenu()
     .addItem('Manage Tags', 'showSidebar')
     .addToUi()
 }
@@ -35,7 +49,7 @@ function showSidebar(): void {
     .evaluate()
     .setTitle('Document Tags')
 
-  DocumentApp.getUi().showSidebar(ui)
+  getUi().showSidebar(ui)
 }
 
 function include(filename: string): string {
@@ -50,7 +64,7 @@ function showPicker() {
     .setHeight(425)
     .setSandboxMode(HtmlService.SandboxMode.IFRAME);
 
-  DocumentApp.getUi().showModalDialog(html, 'Select Tag Document');
+  getUi().showModalDialog(html, 'Select Tag Document');
 }
 
 function getOAuthToken() {

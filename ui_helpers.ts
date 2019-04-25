@@ -1,15 +1,15 @@
 function getUi(): GoogleAppsScript.Base.Ui {
   try {
     return DocumentApp.getUi()
-  } catch (e) {}
+  } catch (_) {}
 
   try {
     return SpreadsheetApp.getUi()
-  } catch (e) {}
+  } catch (_) {}
 
   try {
     return SlidesApp.getUi()
-  } catch (e) {}
+  } catch (_) {}
 
   throw new Error('Add-on only supports Docs, Spreadsheets, and Slides')
 }

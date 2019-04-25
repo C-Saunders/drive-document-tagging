@@ -41,7 +41,15 @@ function removeTagFromActiveDocument(tag: string): void {
 }
 
 function getActiveDocument(): File {
-  return DriveApp.getFileById(DocumentApp.getActiveDocument().getId())
+  const file = DocumentApp.getActiveDocument()
+    || SpreadsheetApp.getActiveSpreadsheet()
+    || SlidesApp.getActivePresentation()
+
+  if (file !== null) {
+    return DriveApp.getFileById(file.getId())
+  }
+
+  throw new Error('Add-on only supports Docs, Spreadsheets, and Slides')
 }
 
 function getDocumentDescription(doc: File): Tags {

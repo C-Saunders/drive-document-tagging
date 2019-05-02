@@ -9,7 +9,7 @@ Only available tags from the Sheet can be used, so edit the document and reload 
 ## Setup
 Create a Google Sheet containing your tags in the first column. Be sure to include a column header.
 
-![Google Sheet showing the available tags and descriptions](images/sheet_example.png)
+<img src="images/sheet_example.png" alt="Google Sheet showing the available tags and descriptions" width="250">
 
 You will likely want to use a unique value to get the best search results, as shown in the example above.
 
@@ -18,4 +18,4 @@ You'll then need to select the document containing the tags using the add-on UI.
 ## How it works
 The tags are saved in a comma delimited list in the document's Description field. You can see the data in the file browser by clicking on the "i" in the upper-right corner.
 
-![Drive file browser showing the info section containing the description](images/file_description.png)
+<img src="images/file_description.png" alt="Drive file browser showing the info section containing the description" width="225">
